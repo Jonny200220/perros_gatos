@@ -6,8 +6,7 @@ from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras.layers import GlobalAveragePooling2D, Dense, Dropout
 from tensorflow.keras.models import Model
 
-# Parámetros
-DATASET_DIR = './dataset'  # <- cambia esto a la ruta real
+DATASET_DIR = './dataset'
 IMG_SIZE = (160, 160)
 BATCH_SIZE = 32
 SEED = 42
@@ -38,13 +37,13 @@ val_generator = train_datagen.flow_from_directory(
 
 # Cargar MobileNetV2 sin la parte superior
 base_model = MobileNetV2(input_shape=IMG_SIZE + (3,), include_top=False, weights='imagenet')
-base_model.trainable = False  # 4. Congelar todas las capas del modelo base
+base_model.trainable = False  # Congelamiento
 
-# 5. Agregar nuevas capas
+# Agregar nuevas capas
 x = base_model.output
 x = GlobalAveragePooling2D()(x)
 x = Dropout(0.2)(x)
-predictions = Dense(1, activation='sigmoid')(x)  # 2 clases: salida binaria
+predictions = Dense(1, activation='sigmoid')(x)
 
 model = Model(inputs=base_model.input, outputs=predictions)
 
